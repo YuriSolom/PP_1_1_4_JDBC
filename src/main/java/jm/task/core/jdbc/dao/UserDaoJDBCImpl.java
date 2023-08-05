@@ -9,10 +9,10 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (" +
-            "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT" +
+            "id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT" +
             ",name VARCHAR(45) NOT NULL" +
             ", lastName VARCHAR(45) NOT NULL" +
-            ", age INT NULL)";
+            ", age TINYINT NULL)";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS users";
     private static final String INSERT_USER = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
     private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
