@@ -8,19 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (" +
+            "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT" +
+            ",name VARCHAR(45) NOT NULL" +
+            ", lastName VARCHAR(45) NOT NULL" +
+            ", age INT NULL)";
+    private static final String DROP_TABLE = "DROP TABLE IF EXISTS users";
+    private static final String INSERT_USER = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
+    private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
+    private static final String SELECT_ALL_USERS = "SELECT * FROM my_db.users";
+    private static final String CLEAN_TABLE = "TRUNCATE users";
+
     public UserDaoJDBCImpl() {
 
     }
 
     public void createUsersTable() {
-        String query = "CREATE TABLE IF NOT EXISTS users (" +
-                "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT" +
-                ",name VARCHAR(45) NOT NULL" +
-                ", lastName VARCHAR(45) NOT NULL" +
-                ", age INT NULL)";
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.execute(query);
+            statement.execute(CREATE_TABLE);
             try {
                 connection.commit();
                 System.out.println("Таблица пользователей успешно создана!");
@@ -34,10 +40,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String query = "DROP TABLE IF EXISTS users";
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.execute(query);
+            statement.execute(DROP_TABLE);
             try {
                 connection.commit();
                 System.out.println("Таблица пользователей удалена!");
@@ -52,9 +57,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        String query = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
         try (Connection connection = Util.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_USER)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
@@ -72,9 +76,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        String query = "DELETE FROM users WHERE id = ?";
         try (Connection connection = Util.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setLong(1, id);
             statement.executeUpdate();
             try {
@@ -91,10 +94,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM my_db.users";
         try (Connection connection = Util.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery(query)) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USERS);
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_USERS)) {
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -117,10 +119,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String query = "TRUNCATE users";
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.execute(query);
+            statement.execute(CLEAN_TABLE);
             try {
                 connection.commit();
                 System.out.println("Таблица очищена!");
