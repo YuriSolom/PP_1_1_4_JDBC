@@ -11,7 +11,7 @@ public class Main {
         userDao.saveUser("James", "Bond",(byte) 70);
         userDao.saveUser("Ostin", "Powers",(byte) 60);
         userDao.saveUser("Ronald", "McDonald",(byte) 115);
-        userDao.saveUser("Santa", "Klaus",(byte) 88);
+        userDao.saveUser("Piter", "Parker",(byte) 35);
         System.out.println(userDao.getAllUsers());
         userDao.removeUserById(2);
         System.out.println(userDao.getAllUsers());
