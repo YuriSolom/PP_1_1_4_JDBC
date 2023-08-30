@@ -106,7 +106,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 userList.add(user);
                 try {
                     connection.commit();
-                    System.out.println("Cоздан список пользователей!");
                 } catch (SQLException e) {
                     System.out.println("Не удалось получить список пользователей!");
                     connection.rollback();
@@ -115,6 +114,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Cоздан список пользователей!");
         return userList;
     }
 
